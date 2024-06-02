@@ -49,17 +49,9 @@ const LoginForm = () => {
       >
         {isLoading ? <PropagateLoader color="#fff" /> : "Sign In"}
       </button>
-      <Suspense
-        fallback={
-          <div>
-            <PropagateLoader />
-          </div>
-        }
-      >
-        {error === "CredentialsSignin" && (
-          <div className="text-red-400">Erro no login</div>
-        )}
-      </Suspense>
+      {error === "CredentialsSignin" && (
+        <div className="text-red-400">Erro no login</div>
+      )}
     </form>
   );
 };
