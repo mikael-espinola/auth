@@ -1,14 +1,17 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import React, { FormEvent } from "react";
+import React, { FormEvent, Suspense, useState } from "react";
+import { PropagateLoader } from "react-spinners";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const error = searchParams.get("error");
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
 
@@ -40,12 +43,23 @@ const LoginForm = () => {
         placeholder="Senha"
         className="input input-primary bg-white w-full"
       />
-      <button className="btn btn-primary w-full" type="submit">
-        Sign In
+      <button
+        className="btn btn-primary w-full flex items-center"
+        type="submit"
+      >
+        {isLoading ? <PropagateLoader color="#fff" /> : "Sign In"}
       </button>
-      {error === "CredentialsSignin" && (
-        <div className="text-red-400">Erro no login</div>
-      )}
+      <Suspense
+        fallback={
+          <div>
+            <PropagateLoader />
+          </div>
+        }
+      >
+        {error === "CredentialsSignin" && (
+          <div className="text-red-400">Erro no login</div>
+        )}
+      </Suspense>
     </form>
   );
 };
